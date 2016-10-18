@@ -1,10 +1,11 @@
 # Website Down Notifier on Slack
 
-A simple, one file script that notifies you on slack when your website is down.
 
 <img src="https://raw.githubusercontent.com/AndreiD/SlackUptimeMonitor/master/slackmonitor.JPG" alt="slack website up down notifier uptime ping"/>
 
-# Configuration
+#### A simple, one file script that notifies you on slack when your website is down.
+
+## Configuration
 
 ### Step 1 - Get the script
 
