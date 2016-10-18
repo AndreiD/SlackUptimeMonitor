@@ -1,6 +1,5 @@
-# !/usr/bin/python3
-# -*- coding: utf-8 -*-
-import os
+#!/usr/bin/python3
+#-*- coding: utf-8 -*-
 from slackclient import SlackClient
 import requests
 import datetime
@@ -8,12 +7,13 @@ import pickle
 
 # ================== CONFIGURATION ==================
 
-URLS_TO_CHECK = ["http://facebook.com",
-                 "https://youtube.com:9540"]
+URLS_TO_CHECK = ["http://example.com",
+                 "https://anotherone.net:1337"]
+
 
 # You have to have a token so you can send messages to a slack channel!
 # https://api.slack.com/docs/oauth-test-tokens
-SLACK_TOKEN = os.environ.get('SLACK_TOKEN')
+SLACK_TOKEN = "YOUR_TOKEN_HERE"
 
 # Where you want to receive your notifications ?
 
@@ -22,7 +22,6 @@ SLACK_TOKEN = os.environ.get('SLACK_TOKEN')
 CHANNEL_ID = "G2LCBCXGF"
 
 # ================== END CONFIGURATION ==================
-
 
 slack_client = SlackClient(SLACK_TOKEN)
 
@@ -71,10 +70,13 @@ def down_notifier(the_url):
     # if it's already in the database and last status was up
     if (the_url in old_status_file) and (old_status_file[the_url]['status'] == "up"):
         send_message(CHANNEL_ID, ":no_entry: " + the_url + " is down.")
+    else:
+        print("already down. skip notifying")
 
 
 # if it was previously down, notify that it's back online
 def back_online_notifier(the_url):
+    print("found " + the_url + " back online.")
     try:
         old_status_file = pickle.load(open("status.p", "rb"))
     except Exception as ex:
@@ -85,6 +87,8 @@ def back_online_notifier(the_url):
         it_was_down_time = old_status_file[the_url]['time']
         current_time = datetime.datetime.now().replace(microsecond=0)
         send_message(CHANNEL_ID, ":herb: " + the_url + " is back online. It was down for " + str(current_time - it_was_down_time))
+    else:
+        print("skipping notifying that the url is online")
 
 
 # --- getting only the head ---
@@ -106,9 +110,9 @@ if __name__ == '__main__':
 
     for url in URLS_TO_CHECK:
         if get_status_code(url) != 200:
+            print(url + " is down.")
             down_notifier(url)
             status_file[url] = {'status': "down", 'time': datetime.datetime.now().replace(microsecond=0)}
-
         else:
             back_online_notifier(url)
             status_file[url] = {'status': "up", 'time': datetime.datetime.now().replace(microsecond=0)}
