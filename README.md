@@ -6,12 +6,15 @@ A simple, one file script that notifies you on slack when your website is down.
 
 # Configuration
 
-### Step 1 - Setup the config variables.
+### Step 1 - Get the script
+
+Simply copy paste the script uptimemonitor.py into your server. After you test it add it to cron with your preferred check interval
+
+### Step 2 -  Setup the config variables
+
 
 URLS_TO_CHECK = ["http://facebook.com",
                  "https://youtube.com:9540"]
-
-### Step 2 -  Getting the Token
 
 #### You have to have a token so you can send messages to a slack channel!
 https://api.slack.com/docs/oauth-test-tokens
